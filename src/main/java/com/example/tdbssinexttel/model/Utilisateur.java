@@ -24,6 +24,8 @@ public class Utilisateur extends AbstractEntity implements Serializable {
 
     private Boolean status;
 
+    private String photos;
+
     @Column(name = "verification_code", length = 64)
     private String verificationCode;
 

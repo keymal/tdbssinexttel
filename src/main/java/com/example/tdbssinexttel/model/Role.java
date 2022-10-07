@@ -14,7 +14,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 public class Role extends AbstractEntity implements Serializable {
-
     private String nom;
+    private String description;
 }
 
