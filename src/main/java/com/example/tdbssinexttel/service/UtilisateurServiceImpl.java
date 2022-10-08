@@ -1,6 +1,8 @@
 package com.example.tdbssinexttel.service;
 
+import com.example.tdbssinexttel.model.Role;
 import com.example.tdbssinexttel.model.Utilisateur;
+import com.example.tdbssinexttel.repository.RoleRepository;
 import com.example.tdbssinexttel.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,24 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Autowired
     private UtilisateurRepository utilisateurRepository;
+    @Autowired
+    RoleRepository roleRepository;
 
     @Override
     public List<Utilisateur> listUtilisateur(){
         return  utilisateurRepository.findAll();
+    }
+
+    @Override
+    public List<Role> listRoles(){
+
+        return roleRepository.findAll();
+
+    }
+
+    @Override
+    public void saveUser (Utilisateur utilisateur){
+        utilisateurRepository.save(utilisateur);
     }
 
 }

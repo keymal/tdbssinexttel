@@ -1,8 +1,10 @@
 package com.example.tdbssinexttel.model;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import com.example.tdbssinexttel.repository.RoleRepository;
 import com.example.tdbssinexttel.repository.UtilisateurRepository;
+import com.example.tdbssinexttel.utils.enums.EtatUtilisateur;
 import com.example.tdbssinexttel.utils.enums.ListeDesRoles;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Rollback(value = false)
@@ -32,18 +35,20 @@ class UtilisateurTest {
     TestEntityManager testEntityManager;
 
     @Test
-    public  void testCreateUser(){
+    public void testCreateUser() {
 
-        Role role = testEntityManager.find(Role.class, 1);
-        Utilisateur utilisateur = new Utilisateur("abc",passwordEncoder.encode("bella"),true,"","","",new ArrayList<>());
+        Role role = testEntityManager.find(Role.class, 3);
+        Role role1 = testEntityManager.find(Role.class, 2);
+        Utilisateur utilisateur = new Utilisateur("testandre75@gmail.com", passwordEncoder.encode("master"), true, "", "", "", EtatUtilisateur.ACTIF, new ArrayList<>());
         utilisateur.addRole(role);
         Utilisateur save = utilisateurRepository.save(utilisateur);
+        assertThat(save.getId()).isGreaterThan(0);
 
 
     }
 
     @Test
-    public void testListUsers(){
+    public void testListUsers() {
 
         Iterable<Utilisateur> listUsers = utilisateurRepository.findAll();
 
@@ -51,20 +56,23 @@ class UtilisateurTest {
     }
 
     @Test
-    public void findById(){
-        Utilisateur  utilisateur  = utilisateurRepository.findById(1).get();
+    public void findById() {
+        Utilisateur utilisateur = utilisateurRepository.findById(1).get();
 
         assertThat(utilisateur).isNotNull();
 
     }
 
     @Test
-    public void updateUser(){
-        Utilisateur utilisateur  = utilisateurRepository.findById(1).get();
+    public void updateUser() {
+        Utilisateur utilisateur = utilisateurRepository.findById(2).get();
+
         utilisateur.setStatus(false);
-        utilisateur.setEmail("amougouandre37@gmail.com");
-        System.err.println(utilisateur);
-        System.err.println(utilisateur.getStatus());
+
+        Role role = testEntityManager.find(Role.class, 5);
+
+        utilisateur.getRoles().add(role);
+
     }
 
 }
