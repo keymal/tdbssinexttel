@@ -20,22 +20,5 @@ public class AbstractEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
-    @CreatedBy
-    protected String createdBy;
-
-    @LastModifiedBy
-    protected String lastModifiedBy;
-
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    @JsonIgnore
-    @Column(nullable = false)
-    protected Date creationDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @LastModifiedDate
-    @JsonIgnore
-    protected Date lastModifiedDate;
 
 }

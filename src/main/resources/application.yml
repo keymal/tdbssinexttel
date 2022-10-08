@@ -2,7 +2,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     password: master2035
-    url: jdbc:mysql://localhost:3306/tdbssi?createDatabaseIfNotExist=true&useSSL=false
+    url: jdbc:mysql://localhost:3306/test?createDatabaseIfNotExist=true&useSSL=false
     username: root
   jpa:
     hibernate:
