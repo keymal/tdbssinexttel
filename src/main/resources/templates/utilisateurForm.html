@@ -751,7 +751,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">                                        [[${pageTitle}]]
+                        <h1 class="m-0"> [[${pageTitle}]]
                         </h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
@@ -793,7 +793,7 @@
 
                                         </div>
 
-                                        <th:block  th:if="${utilisateur.id == null}">
+                                        <th:block th:if="${utilisateur.id == null}">
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="password">Mot de passe</label>
@@ -813,7 +813,7 @@
                                                 </div>
 
                                             </div>
-                                        </th:block >
+                                        </th:block>
 
 
                                         <div class="col-sm-4">
@@ -851,22 +851,22 @@
 
                                             </div>
                                         </div>
-                                        <div class="col-sm-5">
+                                        <div class="col-sm-7">
                                             <div class="form-group">
-                                                <label for="exampleInputFile">File input</label>
+                                                <label for="fileImage">Photo</label>
                                                 <div class="input-group">
-                                                    <div class="custom-file">
-                                                        <input type="file" class="custom-file-input" id="exampleInputFile">
-                                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                                                    </div>
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">Upload</span>
-                                                    </div>
+                                                    <input accept="image/png, image/jpeg" type="file" id="fileImage">
+
+
                                                 </div>
                                             </div>
 
                                         </div>
-
+                                        <div class="col-sm-3">
+                                            <img id="thumbail" alt="Photo preview"
+                                                 class="brand-image img-circle elevation-3"
+                                                 th:src="@{/images/Nexttel-Cameroon-Logo.png}" width="100px" height="100px">
+                                        </div>
 
 
                                         <div class="col-md-12 align-self-end" th:if="${utilisateur.id == null}">
@@ -900,7 +900,7 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div class="modal-body text-danger" id="mbody" >
+                            <div class="modal-body text-danger" id="mbody">
                             </div>
                             <div class="modal-footer justify-content-between">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -953,7 +953,7 @@
 <!-- ChartJS -->
 <script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
 
-<script>
+<script type="text/javascript">
     $('#quickForm').validate({
         rules: {
             email: {
@@ -972,11 +972,8 @@
 
         },
         messages: {
-            email: {
-
-            },
-            password: {
-            },
+            email: {},
+            password: {},
             rpassword: {
                 equalTo: "Les mot de passe ne correspondent pas",
 
@@ -1003,7 +1000,7 @@
         url = "[[@{/utilisateurs/check_mail}]]";
         userId = $("#id").val();
         userEmail = $("#email").val();
-        params = {email: userEmail, id:userId};
+        params = {email: userEmail, id: userId};
         // csrfvalue = $("input[name = '_csrf']").val();
 
 
@@ -1013,11 +1010,11 @@
 
                 form.submit();
             } else {
-                showModalDialog("Il existe un utilisateur avec l'adresse [" +$("#email").val() + "]");
+                showModalDialog("Il existe un utilisateur avec l'adresse [" + $("#email").val() + "]");
             }
 
 
-        }).fail(function (){
+        }).fail(function () {
             showModalDialog("Impossible de se connecter au serveur");
         });
         return false;
@@ -1030,9 +1027,45 @@
         }
 
     }
+
     $(function () {
         bsCustomFileInput.init();
     });
+
+
+    function showImageThumbnail(fileInput) {
+
+        var file = fileInput.files[0];
+        var reader = new FileReader();
+        reader.onload = function (e) {
+
+             $("#thumbail").attr("src", e.target.result);
+        };
+
+        reader.readAsDataURL(file);
+
+    }
+
+    $(document).ready(function () {
+        // window.location = "[[@{/utilisateurs/check_mail}]]";
+
+        $("#fileImage").change(function () {
+
+            fileSize = this.files[0].size;
+            if(fileSize > 1048576){
+                this.setCustomValidity("Votre image ne doit pas dépassé 1mb");
+                this.reportValidity();
+            }
+            else {
+                this.setCustomValidity("");
+                showImageThumbnail(this);
+
+            }
+
+        });
+    });
+
+
 </script>
 </body>
 </html>
