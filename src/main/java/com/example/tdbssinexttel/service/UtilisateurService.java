@@ -18,4 +18,6 @@ public interface UtilisateurService {
     Utilisateur get(Integer id) throws UserNotFoundException;
 
     void delete(Integer id) throws UserNotFoundException;
+
+    void  updateUserEnabledStatus(Integer id, boolean status);
 }

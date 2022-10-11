@@ -71,7 +71,8 @@
     <aside class="main-sidebar sidebar-light-blue elevation-5">
         <!-- Brand Logo -->
         <a href="index3.html" class="brand-link text-center">
-            <img th:src="@{/images/Nexttel-Cameroon-Logo.png}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+            <img th:src="@{/images/Nexttel-Cameroon-Logo.png}" alt="AdminLTE Logo"
+                 class="brand-image img-circle elevation-3"
                  style="opacity: .9">
             <span class="brand-text font-weight-light"></span>
         </a>
@@ -109,7 +110,7 @@
                         <a href="#" class="nav-link active">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
-                                 Utilisateurs
+                                Utilisateurs
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
@@ -772,12 +773,14 @@
                             <!-- /.card-header -->
                             <div class="card-body">
                                 <div class=" mt-3">
-                                    <div th:if="${message != null}"  class="alert alert-default-success text-center ">
+                                    <div th:if="${message != null}" class="alert alert-default-success text-center ">
                                         [[${message}]]
                                     </div>
                                 </div>
                                 <div class="table-responsive">
-                                    <table id="employees" class="display table table-head-fixed table-hover  table-bordered dt-responsive nowrap" style="width:100%">
+                                    <table id="employees"
+                                           class="display table table-head-fixed table-hover  table-bordered dt-responsive nowrap"
+                                           style="width:100%">
                                         <thead>
                                         <tr>
                                             <th>ID</th>
@@ -829,7 +832,7 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div class="modal-body "  >
+                            <div class="modal-body ">
                                 <p id="confirm-text"></p>
                             </div>
                             <div class="modal-footer justify-content-between">
@@ -890,7 +893,6 @@
     $(function () {
 
 
-
         $.ajax({
             url: '/utilisateurs/restListeUtilisateurs',
             method: 'GET',
@@ -898,28 +900,29 @@
             success: function (response) {
                 table = $('#employees').DataTable({
                     language: {
-                        processing:     "Traitement en cours...",
-                        search:         "Rechercher&nbsp;:",
-                        lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
-                        info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-                        infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
-                        infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-                        infoPostFix:    "",
+                        processing: "Traitement en cours...",
+                        search: "Rechercher&nbsp;:",
+                        lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+                        info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                        infoEmpty: "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+                        infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                        infoPostFix: "",
                         loadingRecords: "Chargement en cours...",
-                        zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
-                        emptyTable:     "Aucune donnée disponible dans le tableau",
+                        zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                        emptyTable: "Aucune donnée disponible dans le tableau",
                         paginate: {
-                            first:      "Premier",
-                            previous:   "Pr&eacute;c&eacute;dent",
-                            next:       "Suivant",
-                            last:       "Dernier"
+                            first: "Premier",
+                            previous: "Pr&eacute;c&eacute;dent",
+                            next: "Suivant",
+                            last: "Dernier"
                         },
                         aria: {
-                            sortAscending:  ": activer pour trier la colonne par ordre croissant",
+                            sortAscending: ": activer pour trier la colonne par ordre croissant",
                             sortDescending: ": activer pour trier la colonne par ordre décroissant"
                         }
                     },
 
+                    deferLoading: 57,
                     "pageLength": 3,
                     lengthMenu: [
                         [3, 5, -1],
@@ -928,7 +931,7 @@
                     autoFill: true,
                     dom: 'Bfrtip',
                     buttons: [
-                         'csv', 'excel', 'pdf', 'print'
+                        'csv', 'excel', 'pdf', 'print'
                     ],
 
 
@@ -947,10 +950,10 @@
                         },
                         {
                             "data": "roles", "render": function (data) {
-                                var s ="";
+                                var s = "";
                                 for (var i = 0; i < data.length; i++) {
                                     console.log(data[i].nom);
-                                    s += "["+data[i].nom +"]  ";
+                                    s += "[" + data[i].nom + "]  ";
 
                                 }
 
@@ -962,18 +965,23 @@
                             }
                         },
                         {
-                            "data": "status", "render": function (data) {
+                            "data": "status", "render": function (data, type, row) {
+                                var userId = row.id;
 
 
-                                var link = /*[[@{/fournisseur/modifier/}]]*/'';
+                                if (data == true) {
 
-                                if(data == true){
-                                    return '<p class="text-success">Actif</p>'
+                                    var link = /*[[@{/utilisateurs/}]]*/'';
+                                    link = link + userId + "/enabled/true";
 
-                                }
-                                else {
+                                    return '<a title="Activer ce compte" href="' + link + '" class="text-danger">Désactiver le compte</a>'
 
-                                    return '<p class="text-danger">Inactif</p>'
+                                } else {
+
+                                    var link = /*[[@{/utilisateurs/}]]*/'';
+                                    link = link + userId + "/enabled/true";
+
+                                    return '<a  title="Désactiver ce compte" href="' + link + '" class="text-success">Activer le compte</a>'
 
 
                                 }
@@ -986,7 +994,7 @@
 
 
                                 var link = /*[[@{/utilisateurs/edit/}]]*/'';
-                                return '<a class="fas fa-edit  text-danger" title="Modifier les informations de cet utilisateur"   href="'+link+id+'"></a>'
+                                return '<a class="fas fa-edit  text-danger" title="Modifier les informations de cet utilisateur"   href="' + link + id + '"></a>'
 
                             }
                         },
@@ -994,11 +1002,10 @@
                             "data": "id", "render": function (id) {
 
                                 var link = /*[[@{/utilisateurs/delete/}]]*/'';
-                                return '<a  userId="'+id+'" class="fas fa-trash  text-danger link-delete"  title="Rendre inactif cet utilisateur dans le système"  href="'+link+id+'"></a>'
+                                return '<a  userId="' + id + '" class="fas fa-trash  text-danger link-delete"  title="Rendre inactif cet utilisateur dans le système"  href="' + link + id + '"></a>'
 
                             }
                         }
-
 
 
                     ],
@@ -1006,9 +1013,9 @@
                     "bDestroy": true
                 });
 
-                var data = table.rows({selected:  false}).data();
-                identifiant =[]
-                for (var i=0; i < data.length ;i++){
+                var data = table.rows({selected: false}).data();
+                identifiant = []
+                for (var i = 0; i < data.length; i++) {
                     identifiant.push(data[i]['id']);
 
                 }
@@ -1041,23 +1048,20 @@
     });
 
 
-
-
-
     /*]]>*/
 
 
 </script>
 <script type="text/javascript">
 
-    $(function (){
-        $(document).on("click",".link-delete", function (e) {
+    $(function () {
+        $(document).on("click", ".link-delete", function (e) {
             e.preventDefault();
             link = $(this);
             userId = link.attr("userId");
 
-            $("#yesButton").attr("href",link.attr("href"));
-            $("#confirm-text").text("Confirmer la suppresion de l'utilisateur avec pour identifiant  ["+userId + "] ?");
+            $("#yesButton").attr("href", link.attr("href"));
+            $("#confirm-text").text("Confirmer la suppresion de l'utilisateur avec pour identifiant  [" + userId + "] ?");
             $("#confirm-modal").modal();
 
         });
@@ -1066,18 +1070,10 @@
     $(document).ready(function () {
 
 
-
-
-
         // var utilisateurs = [[${utilisateurs}]];
 
 
-
     });
-
-
-
-
 
 
 </script>

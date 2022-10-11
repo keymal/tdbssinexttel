@@ -85,4 +85,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         utilisateurRepository.save(utilisateur);
     }
 
+    @Override
+    public void  updateUserEnabledStatus(Integer id , boolean status){
+        utilisateurRepository.updateEnableStatus(id ,status);
+    }
+
 }

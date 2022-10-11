@@ -73,7 +73,7 @@ public class UtilisateurController {
     @PostMapping("/check_mail")
     public String check_mail(@Param("email") String email, @Param("id") Integer id) {
 
-        return utilisateurService.findUserByEmail(id,email) ? "OK" : "L'adresse mail existe deja";
+        return utilisateurService.findUserByEmail(id, email) ? "OK" : "L'adresse mail existe deja";
     }
 
 
@@ -88,7 +88,7 @@ public class UtilisateurController {
             List<Role> listRoles = utilisateurService.listRoles();
             model.addAttribute("listRoles", listRoles);
 
-            model.addAttribute("pageTitle", "Gestion des utilisateurs | Modifier les informations de l'utilisateur : "+id);
+            model.addAttribute("pageTitle", "Gestion des utilisateurs | Modifier les informations de l'utilisateur : " + id);
 
             return "utilisateurForm";
 
@@ -106,11 +106,10 @@ public class UtilisateurController {
 
 
         try {
-           utilisateurService.delete(id);
+            utilisateurService.delete(id);
 
 
-
-            redirectAttributes.addFlashAttribute("message", "Utilisateur avec " +id+" a été supprimé pour les opérations");
+            redirectAttributes.addFlashAttribute("message", "Utilisateur avec " + id + " a été supprimé pour les opérations");
 
 
         } catch (UserNotFoundException ex) {
@@ -119,6 +118,22 @@ public class UtilisateurController {
         }
         return "redirect:/utilisateurs";
 
+
+    }
+
+    @GetMapping("/{id}/enabled/{status}")
+    public String enabled(@PathVariable("id") Integer id, @PathVariable("status") boolean status, RedirectAttributes redirectAttributes, Model model) {
+
+
+        utilisateurService.updateUserEnabledStatus(id, status);
+
+
+        String enabled = status ? "actif" : "inactif";
+        String message = "Utilisateur " + id + " est désormais " + enabled;
+        redirectAttributes.addFlashAttribute("message", message);
+
+
+        return "redirect:/utilisateurs";
 
 
     }
