@@ -16,4 +16,6 @@ public interface UtilisateurService {
     Boolean findUserByEmail(Integer id, String email);
 
     Utilisateur get(Integer id) throws UserNotFoundException;
+
+    void delete(Integer id) throws UserNotFoundException;
 }

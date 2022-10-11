@@ -5,6 +5,7 @@ import com.example.tdbssinexttel.model.Role;
 import com.example.tdbssinexttel.model.Utilisateur;
 import com.example.tdbssinexttel.repository.RoleRepository;
 import com.example.tdbssinexttel.repository.UtilisateurRepository;
+import com.example.tdbssinexttel.utils.enums.EtatUtilisateur;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<Utilisateur> listUtilisateur() {
-        return utilisateurRepository.findAll();
+        return utilisateurRepository.findUtilisateursByEtatUtilisateur(EtatUtilisateur.ACTIF);
     }
 
     @Override
@@ -35,7 +36,13 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public void saveUser(Utilisateur utilisateur) {
-        utilisateurRepository.save(utilisateur);
+        boolean isUserUpdate = (utilisateur.getId() !=null);
+                if(isUserUpdate){
+                    utilisateurRepository.save(utilisateur);
+
+                }else {
+                    utilisateur.setEtatUtilisateur(EtatUtilisateur.ACTIF);
+                }
     }
 
 
@@ -65,6 +72,17 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         } catch (NoSuchElementException ex) {
             throw new UserNotFoundException("Impossible de trouver :" + id);
         }
+    }
+
+    @Override
+    public void delete(Integer id) throws UserNotFoundException {
+        Long countById = utilisateurRepository.countById(id);
+        if (countById == null || countById == 0) {
+            throw new UserNotFoundException("Impossible de trouver :" + id);
+        }
+        Utilisateur utilisateur = utilisateurRepository.findById(id).get();
+        utilisateur.setEtatUtilisateur(EtatUtilisateur.INACTIF);
+        utilisateurRepository.save(utilisateur);
     }
 
 }

@@ -100,4 +100,26 @@ public class UtilisateurController {
 
 
     }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes, Model model) {
+
+
+        try {
+           utilisateurService.delete(id);
+
+
+
+            redirectAttributes.addFlashAttribute("message", "Utilisateur avec " +id+" a été supprimé pour les opérations");
+
+
+        } catch (UserNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+
+        }
+        return "redirect:/utilisateurs";
+
+
+
+    }
 }

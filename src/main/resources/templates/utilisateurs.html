@@ -19,7 +19,7 @@
     <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
     <title>Title</title>
 </head>
-<body class="hold-transition  sidebar-mini layout-fixed layout-navbar-fixed  pace-primary">
+<body class="hold-transition  sidebar-mini layout-fixed layout-navbar-fixed ">
 
 <div class="wrapper">
 
@@ -820,6 +820,29 @@
 
                 </div>
 
+                <div class="modal fade" id="confirm-modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title text-danger">Confirmation de suppression</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body "  >
+                                <p id="confirm-text"></p>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <a class="btn btn-danger" id="yesButton" href="">Confirmer</a>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+
+
             </div><!--/. container-fluid -->
         </section>
 
@@ -963,15 +986,15 @@
 
 
                                 var link = /*[[@{/utilisateurs/edit/}]]*/'';
-                                return '<a class="fas fa-edit  text-danger"   href="'+link+id+'"></a>'
+                                return '<a class="fas fa-edit  text-danger" title="Modifier les informations de cet utilisateur"   href="'+link+id+'"></a>'
 
                             }
                         },
                         {
-                            "data": "id", "render": function (data) {
+                            "data": "id", "render": function (id) {
 
-                                var link = /*[[@{/utilisateurs/edit/}]]*/'' + data;
-                                return '<a class="fas fa-trash  text-danger"   href="'+link+'"></a>'
+                                var link = /*[[@{/utilisateurs/delete/}]]*/'';
+                                return '<a  userId="'+id+'" class="fas fa-trash  text-danger link-delete"  title="Rendre inactif cet utilisateur dans le système"  href="'+link+id+'"></a>'
 
                             }
                         }
@@ -1020,102 +1043,42 @@
 
 
 
-    function edit(id) {
-        $.ajax({
-            url: '/fournisseur/modifier/' + id,
-            method: 'GET',
-            dataType: 'json',
-            success: function (data) {
-
-            },
-            error: function (error) {
-                alert(error);
-            }
-        })
-    }
-    function deletedetails(id) {
-
-        if (confirm("Supprimer ce fournisseur ?? Cette opération est irreversible"))
-            $.ajax({
-                url: '/fournisseur/delete/' + id,
-                method: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    if (data != null) {
-                        alert("Suppression du fournisseur " + data.nom + " avec l'identifiant " + data.id + " réussie");
-                        table.ajax.reload(null, false);
-                    } else {
-                        alert("Erreur lors de l'opération");
-
-                    }
-
-
-                },
-                error: function (error) {
-                    alert(error);
-                }
-            })
-
-    }
 
     /*]]>*/
 
 
 </script>
-<script th:inline="javascript">
-    /*<![CDATA[*/
+<script type="text/javascript">
 
+    $(function (){
+        $(document).on("click",".link-delete", function (e) {
+            e.preventDefault();
+            link = $(this);
+            userId = link.attr("userId");
+
+            $("#yesButton").attr("href",link.attr("href"));
+            $("#confirm-text").text("Confirmer la suppresion de l'utilisateur avec pour identifiant  ["+userId + "] ?");
+            $("#confirm-modal").modal();
+
+        });
+    })
 
     $(document).ready(function () {
 
 
 
 
+
         // var utilisateurs = [[${utilisateurs}]];
 
-        function edit(id) {
-            $.ajax({
-                url: '/fournisseur/modifier/' + id,
-                method: 'GET',
-                dataType: 'json',
-                success: function (data) {
 
-                },
-                error: function (error) {
-                    alert(error);
-                }
-            })
-        }
-        function deletedetails(id) {
-
-            if (confirm("Supprimer ce fournisseur ?? Cette opération est irreversible"))
-                $.ajax({
-                    url: '/fournisseur/delete/' + id,
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function (data) {
-                        if (data != null) {
-                            alert("Suppression du fournisseur " + data.nom + " avec l'identifiant " + data.id + " réussie");
-                            table.ajax.reload(null, false);
-                        } else {
-                            alert("Erreur lors de l'opération");
-
-                        }
-
-
-                    },
-                    error: function (error) {
-                        alert(error);
-                    }
-                })
-
-        }
 
     });
 
 
 
-    /*]]>*/
+
+
 
 </script>
 </body>
