@@ -751,7 +751,8 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Tableau de bord</h1>
+                        <h1 class="m-0">                                        [[${pageTitle}]]
+                        </h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -774,9 +775,14 @@
                             <div class="card-body">
 
 
-                                <form id="quickForm" autocomplete="off" th:action="@{/utilisateurs/save}" method="post"
+                                <form id="quickForm" onsubmit="return  check_mail(this);" autocomplete="off"
+                                      th:action="@{/utilisateurs/save}" method="post"
                                       th:object="${utilisateur}">
                                     <div class="row">
+
+
+                                        <input type="hidden" th:field="*{id}" name="id" id="id">
+
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="email">Adresse mail</label>
@@ -787,27 +793,30 @@
 
                                         </div>
 
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="password">Mot de passe</label>
-                                                <input type="password" th:field="*{password}" name="password"
-                                                       class="form-control" id="password"
-                                                >
+                                        <th:block  th:if="${utilisateur.id == null}">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="password">Mot de passe</label>
+                                                    <input type="password" th:field="*{password}" name="password"
+                                                           class="form-control" id="password" required
+                                                    >
+                                                </div>
+
                                             </div>
 
-                                        </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="rpassword">Confirmer le mot de passe</label>
+                                                    <input type="password" name="rpassword" class="form-control"
+                                                           id="rpassword" required
+                                                    >
+                                                </div>
 
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="rpassword">Confirmer le mot de passe</label>
-                                                <input type="password" name="rpassword" class="form-control"
-                                                       id="rpassword"
-                                                >
                                             </div>
+                                        </th:block >
 
-                                        </div>
 
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-4">
                                             <!-- checkbox -->
                                             <div class="form-group">
                                                 <label>Roles</label>
@@ -818,6 +827,7 @@
                                                                type="checkbox" th:value="${role.id}"
                                                                th:text="${role.nom}">
 
+
                                                     </div>
 
                                                 </th:block>
@@ -826,7 +836,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-3">
                                             <!-- checkbox -->
                                             <div class="form-group">
                                                 <label>Statut du compte</label>
@@ -841,10 +851,30 @@
 
                                             </div>
                                         </div>
+                                        <div class="col-sm-5">
+                                            <div class="form-group">
+                                                <label for="exampleInputFile">File input</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="exampleInputFile">
+                                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                                    </div>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">Upload</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
 
 
-                                        <div class="col-md-12 align-self-end">
+
+                                        <div class="col-md-12 align-self-end" th:if="${utilisateur.id == null}">
                                             <button class="btn btn-primary" type="submit">Ajouter</button>
+                                        </div>
+
+                                        <div class="col-md-12 align-self-end" th:if="${utilisateur.id != null}">
+                                            <button class="btn btn-primary" type="submit">Enregistrer</button>
                                         </div>
 
                                     </div>
@@ -861,6 +891,27 @@
 
                 </div>
 
+                <div class="modal fade" id="modal-default">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Attention</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body text-danger" id="mbody" >
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+
+
             </div><!--/. container-fluid -->
         </section>
 
@@ -871,6 +922,7 @@
 <script th:src="@{/plugins/jquery/jquery.min.js}"></script>
 <!-- Bootstrap -->
 <script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/plugins/bs-custom-file-input/bs-custom-file-input.min.js}"></script>
 
 <script th:src="@{/plugins/pace-progress/pace.min.js}"></script>
 <!-- overlayScrollbars -->
@@ -921,11 +973,9 @@
         },
         messages: {
             email: {
-                required: "Ce champ  est obligatoire",
 
             },
             password: {
-                required: "Ce champ  est obligatoire",
             },
             rpassword: {
                 equalTo: "Les mot de passe ne correspondent pas",
@@ -947,6 +997,42 @@
         }
     });
 
+
+    function check_mail(form) {
+
+        url = "[[@{/utilisateurs/check_mail}]]";
+        userId = $("#id").val();
+        userEmail = $("#email").val();
+        params = {email: userEmail, id:userId};
+        // csrfvalue = $("input[name = '_csrf']").val();
+
+
+        $.post(url, params, function (response) {
+
+            if (response == "OK") {
+
+                form.submit();
+            } else {
+                showModalDialog("Il existe un utilisateur avec l'adresse [" +$("#email").val() + "]");
+            }
+
+
+        }).fail(function (){
+            showModalDialog("Impossible de se connecter au serveur");
+        });
+        return false;
+
+
+        function showModalDialog(message) {
+            $("#mbody").text(message);
+            $("#modal-default").modal();
+
+        }
+
+    }
+    $(function () {
+        bsCustomFileInput.init();
+    });
 </script>
 </body>
 </html>

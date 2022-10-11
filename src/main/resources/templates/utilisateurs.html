@@ -860,7 +860,9 @@
 <!-- ChartJS -->
 <script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
 
-<script>
+<script th:inline="javascript" type="text/javascript">
+    /*<![CDATA[*/
+
     var table;
     $(function () {
 
@@ -895,6 +897,17 @@
                         }
                     },
 
+                    "pageLength": 3,
+                    lengthMenu: [
+                        [3, 5, -1],
+                        [3, 5, 'Toute'],
+                    ],
+                    autoFill: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                         'csv', 'excel', 'pdf', 'print'
+                    ],
+
 
                     data: response,
                     columns: [
@@ -902,7 +915,9 @@
                             data: 'id'
                         },
                         {
-                            data: 'photo'
+                            "data": "roles", "render": function (data) {
+                                return '<span class="fas fa-portrait text-gray-dark "></span>'
+                            }
                         },
                         {
                             data: 'email'
@@ -944,19 +959,19 @@
                             }
                         },
                         {
-                            "data": "id", "render": function (data) {
+                            "data": "id", "render": function (id) {
 
 
-                                var link = /*[[@{/fournisseur/modifier/}]]*/'';
-
-                                return '<a class="alert-link"    href="' + "/fournisseur/modifier/" + data + '"> Modifier</a>'
+                                var link = /*[[@{/utilisateurs/edit/}]]*/'';
+                                return '<a class="fas fa-edit  text-danger"   href="'+link+id+'"></a>'
 
                             }
                         },
                         {
                             "data": "id", "render": function (data) {
 
-                                return '<a class="alert-link text-danger"   onclick="deletedetails(' + data + ')">Editer</a>'
+                                var link = /*[[@{/utilisateurs/edit/}]]*/'' + data;
+                                return '<a class="fas fa-trash  text-danger"   href="'+link+'"></a>'
 
                             }
                         }
@@ -1042,6 +1057,9 @@
             })
 
     }
+
+    /*]]>*/
+
 
 </script>
 <script th:inline="javascript">

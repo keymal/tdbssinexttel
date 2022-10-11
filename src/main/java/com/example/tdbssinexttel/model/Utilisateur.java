@@ -27,7 +27,6 @@ public class Utilisateur extends AbstractEntity implements Serializable {
     @NotEmpty
     @NotNull
     @Column(unique = true)
-    @Email
     private String email;
 
     private String password;

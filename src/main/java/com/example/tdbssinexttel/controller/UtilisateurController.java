@@ -1,10 +1,14 @@
 package com.example.tdbssinexttel.controller;
 
+import com.example.tdbssinexttel.exception.UserNotFoundException;
 import com.example.tdbssinexttel.model.Role;
 import com.example.tdbssinexttel.model.Utilisateur;
+import com.example.tdbssinexttel.repository.RoleRepository;
 import com.example.tdbssinexttel.service.UtilisateurService;
+import com.example.tdbssinexttel.utils.enums.ListeDesRoles;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,6 +25,9 @@ public class UtilisateurController {
     @Autowired
     UtilisateurService utilisateurService;
 
+    @Autowired
+    RoleRepository roleRepository;
+
     @GetMapping("")
     public String utilisateurs(Model model) {
 
@@ -35,11 +42,14 @@ public class UtilisateurController {
 
         Utilisateur utilisateur = new Utilisateur();
         utilisateur.setStatus(true);
+        Role role = roleRepository.findRoleByNom(ListeDesRoles.OPERATIONNEL.toString());
+        utilisateur.addRole(role);
 
         List<Role> listRoles = utilisateurService.listRoles();
 
         model.addAttribute("utilisateur", utilisateur);
         model.addAttribute("listRoles", listRoles);
+        model.addAttribute("pageTitle", "Créer un utilisateur");
         return "utilisateurForm";
     }
 
@@ -57,5 +67,37 @@ public class UtilisateurController {
 
         redirectAttributes.addFlashAttribute("message", "Opération réussie");
         return "redirect:/utilisateurs";
+    }
+
+    @ResponseBody
+    @PostMapping("/check_mail")
+    public String check_mail(@Param("email") String email, @Param("id") Integer id) {
+
+        return utilisateurService.findUserByEmail(id,email) ? "OK" : "L'adresse mail existe deja";
+    }
+
+
+    @GetMapping("/edit/{id}")
+    public String fdfdf(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes, Model model) {
+
+
+        try {
+            Utilisateur utilisateur = utilisateurService.get(id);
+
+            model.addAttribute("utilisateur", utilisateur);
+            List<Role> listRoles = utilisateurService.listRoles();
+            model.addAttribute("listRoles", listRoles);
+
+            model.addAttribute("pageTitle", "Gestion des utilisateurs | Modifier les informations de l'utilisateur : "+id);
+
+            return "utilisateurForm";
+
+        } catch (UserNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+            return "redirect:/utilisateurs";
+
+        }
+
+
     }
 }
