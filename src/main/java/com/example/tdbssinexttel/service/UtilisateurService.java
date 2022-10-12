@@ -11,7 +11,7 @@ public interface UtilisateurService {
 
     List<Role> listRoles();
 
-    void saveUser(Utilisateur utilisateur);
+    Utilisateur saveUser(Utilisateur utilisateur);
 
     Boolean findUserByEmail(Integer id, String email);
 

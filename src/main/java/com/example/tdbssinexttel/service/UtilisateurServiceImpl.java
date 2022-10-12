@@ -35,14 +35,18 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
-    public void saveUser(Utilisateur utilisateur) {
-        boolean isUserUpdate = (utilisateur.getId() !=null);
-                if(isUserUpdate){
-                    utilisateurRepository.save(utilisateur);
+    public Utilisateur saveUser(Utilisateur utilisateur) {
+        boolean isUserUpdate = (utilisateur.getId() != null);
+        if (isUserUpdate) {
+            System.err.println("hel");
+            utilisateur.setEtatUtilisateur(EtatUtilisateur.ACTIF);
+            return    utilisateurRepository.save(utilisateur);
 
-                }else {
-                    utilisateur.setEtatUtilisateur(EtatUtilisateur.ACTIF);
-                }
+        } else {
+            System.err.println("well");
+            utilisateur.setEtatUtilisateur(EtatUtilisateur.ACTIF);
+            return utilisateurRepository.save(utilisateur);
+        }
     }
 
 
@@ -76,18 +80,28 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public void delete(Integer id) throws UserNotFoundException {
+
         Long countById = utilisateurRepository.countById(id);
+
         if (countById == null || countById == 0) {
+
             throw new UserNotFoundException("Impossible de trouver :" + id);
+
         }
         Utilisateur utilisateur = utilisateurRepository.findById(id).get();
+
         utilisateur.setEtatUtilisateur(EtatUtilisateur.INACTIF);
+
         utilisateurRepository.save(utilisateur);
     }
 
+
     @Override
-    public void  updateUserEnabledStatus(Integer id , boolean status){
-        utilisateurRepository.updateEnableStatus(id ,status);
+    public void updateUserEnabledStatus(Integer id, boolean status) {
+
+
+        utilisateurRepository.updateEnableStatus(id, status);
+
     }
 
 }

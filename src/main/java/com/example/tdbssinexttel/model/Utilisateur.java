@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -33,7 +32,7 @@ public class Utilisateur extends AbstractEntity implements Serializable {
 
     private Boolean status;
 
-    private String photo;
+    private String photos;
 
     @Column(name = "verification_code", unique = true, length = 64)
     private String verificationCode;
@@ -51,5 +50,26 @@ public class Utilisateur extends AbstractEntity implements Serializable {
 
     public void addRole(Role role) {
         this.roles.add(role);
+    }
+
+    //Pour dire que cet attribut ne mappe avec rien de la base de donneés
+
+    private transient String y;
+
+    public void setY(String y) {
+        this.y = y;
+    }
+
+    public String getY() {
+        if (id == null || photos == null) return "/images/Nexttel-Cameroon-Logo.png";
+
+        return "/user-photos/" + this.id + "/" + this.photos;
+    }
+
+    @Transient
+    public String getPhotosImagePath() {
+        if (id == null || photos == null) return "/images/Nexttel-Cameroon-Logo.png";
+
+        return "/user-photos/" + this.id + "/" + this.photos;
     }
 }

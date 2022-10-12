@@ -775,7 +775,7 @@
                             <div class="card-body">
 
 
-                                <form id="quickForm" onsubmit="return  check_mail(this);" autocomplete="off"
+                                <form id="quickForm" onsubmit="return  check_mail(this);" autocomplete="off" enctype="multipart/form-data"
                                       th:action="@{/utilisateurs/save}" method="post"
                                       th:object="${utilisateur}">
                                     <div class="row">
@@ -854,8 +854,10 @@
                                         <div class="col-sm-7">
                                             <div class="form-group">
                                                 <label for="fileImage">Photo</label>
+                                                <input type="hidden" th:field="*{photos}" >
+
                                                 <div class="input-group">
-                                                    <input accept="image/png, image/jpeg" type="file" id="fileImage">
+                                                    <input name="image" accept="image/*" type="file" id="fileImage">
 
 
                                                 </div>
@@ -865,7 +867,7 @@
                                         <div class="col-sm-3">
                                             <img id="thumbail" alt="Photo preview"
                                                  class="brand-image img-circle elevation-3"
-                                                 th:src="@{/images/Nexttel-Cameroon-Logo.png}" width="100px" height="100px">
+                                                 th:src="@{${utilisateur.photosImagePath}}" width="100px" height="100px">
                                         </div>
 
 
