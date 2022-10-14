@@ -751,7 +751,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0"> [[${pageTitle}]]
+                        <h1 class="m-0"> Informations sur le profil
                         </h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
@@ -783,75 +783,48 @@
 
                                         <input type="hidden" th:field="*{id}" name="id" id="id">
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="email">Adresse mail</label>
-                                                <input type="email" th:field="*{email}" name="email"
+                                                <input type="email" th:field="*{email}" name="email" readonly
                                                        class="form-control" id="email"
                                                 >
                                             </div>
 
                                         </div>
 
-                                        <th:block th:if="${utilisateur.id == null}">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="password">Mot de passe</label>
-                                                    <input type="password" th:field="*{password}" name="password"
-                                                           class="form-control" id="password" required
-                                                    >
-                                                </div>
-
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="password">Mot de passe</label>
+                                                <input type="password" th:field="*{password}" name="password"
+                                                       class="form-control" id="password" required placeholder="Ne rien remplir ici si vous ne souhaitez pas changer de mot de passe"
+                                                >
                                             </div>
 
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="rpassword">Confirmer le mot de passe</label>
-                                                    <input type="password" name="rpassword" class="form-control"
-                                                           id="rpassword" required
-                                                    >
-                                                </div>
+                                        </div>
 
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="rpassword">Confirmer le mot de passe</label>
+                                                <input type="password" name="rpassword" class="form-control"
+                                                       id="rpassword" required
+                                                >
                                             </div>
-                                        </th:block>
 
+                                        </div>
 
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-12">
                                             <!-- checkbox -->
                                             <div class="form-group">
                                                 <label>Roles</label>
 
-                                                <th:block th:each=" role : ${listRoles}">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" th:field="*{roles}"
-                                                               type="checkbox" th:value="${role.id}"
-                                                               th:text="${role.nom}">
-
-
-                                                    </div>
-
-                                                </th:block>
+                                              <span class="text-blue">[[${utilisateur.roles}]]</span>
 
 
                                             </div>
                                         </div>
 
-                                        <div class="col-sm-3">
-                                            <!-- checkbox -->
-                                            <div class="form-group">
-                                                <label>Statut du compte</label>
-
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" th:field="*{status}"
-                                                           th:value="*{status}">
-                                                    <label class="form-check-label"
-                                                    >Actif</label>
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-7">
+                                        <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label for="fileImage">Photo</label>
                                                 <input type="hidden" th:field="*{photos}" >
@@ -871,9 +844,6 @@
                                         </div>
 
 
-                                        <div class="col-md-12 align-self-end" th:if="${utilisateur.id == null}">
-                                            <button class="btn btn-primary" type="submit">Ajouter</button>
-                                        </div>
 
                                         <div class="col-md-12 align-self-end" th:if="${utilisateur.id != null}">
                                             <button class="btn btn-primary" type="submit">Enregistrer</button>
@@ -997,39 +967,38 @@
     });
 
 
-    function check_mail(form) {
-
-        url = "[[@{/utilisateurs/check_mail}]]";
-        userId = $("#id").val();
-        userEmail = $("#email").val();
-        csrf1 = $("input[name = '_csrf']").val();
-        console.log(csrf);
-        params = {email: userEmail, id: userId, csrf:csrf1 };
-
-
-        $.post(url, params, function (response) {
-
-            if (response == "OK") {
-
-                form.submit();
-            } else {
-                showModalDialog("Il existe un utilisateur avec l'adresse [" + $("#email").val() + "]");
-            }
-
-
-        }).fail(function () {
-            showModalDialog("Impossible de se connecter au serveur");
-        });
-        return false;
-
-
-        function showModalDialog(message) {
-            $("#mbody").text(message);
-            $("#modal-default").modal();
-
-        }
-
-    }
+    // function check_mail(form) {
+    //
+    //     url = "[[@{/utilisateurs/check_mail}]]";
+    //     userId = $("#id").val();
+    //     userEmail = $("#email").val();
+    //     csrf1 = $("input[name = '_csrf']").val();
+    //     params = {email: userEmail, id: userId, csrf:csrf1 };
+    //
+    //
+    //     $.post(url, params, function (response) {
+    //
+    //         if (response == "OK") {
+    //
+    //             form.submit();
+    //         } else {
+    //             showModalDialog("Il existe un utilisateur avec l'adresse [" + $("#email").val() + "]");
+    //         }
+    //
+    //
+    //     }).fail(function () {
+    //         showModalDialog("Impossible de se connecter au serveur");
+    //     });
+    //     return false;
+    //
+    //
+    //     function showModalDialog(message) {
+    //         $("#mbody").text(message);
+    //         $("#modal-default").modal();
+    //
+    //     }
+    //
+    // }
 
     $(function () {
         bsCustomFileInput.init();

@@ -20,4 +20,6 @@ public interface UtilisateurService {
     void delete(Integer id) throws UserNotFoundException;
 
     void  updateUserEnabledStatus(Integer id, boolean status);
+
+    Utilisateur getUserByEmail(String email);
 }

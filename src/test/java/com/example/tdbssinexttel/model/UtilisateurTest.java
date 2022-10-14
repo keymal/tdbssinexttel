@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ class UtilisateurTest {
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
 
 
     @Autowired
@@ -63,9 +66,11 @@ class UtilisateurTest {
 
     @Test
     public void updateUser() {
-        Utilisateur utilisateur = utilisateurRepository.findById(2).get();
+        Utilisateur utilisateur = utilisateurRepository.findById(1).get();
 
-        utilisateur.setStatus(false);
+        utilisateur.setStatus(true);
+        utilisateur.setPassword("master");
+        utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
 
         Role role = testEntityManager.find(Role.class, 5);
 

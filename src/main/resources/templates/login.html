@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TDBSSI</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" th:href="@{/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
+    <style>
+
+
+        .couleurNexttel {
+            color: #E31A22;
+
+        }
+
+    </style>
+</head>
+
+
+<body class="hold-transition login-page">
+
+
+<div class="login-box">
+
+    <div class="card animation__wobble">
+        <div class="card-header text-center ">
+            <img th:src="@{/images/Nexttel-Cameroon-Logo.png}" alt="AdminLTELogo" class="brand-image img-circle elevation-3 "
+                 height="70" width="70">
+
+        </div>
+
+        <div class="card-body row">
+
+            <div th:if="${param.error}">
+                <p class="text-danger"> [[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+            </div>
+
+            <div th:if="${param.logout}">
+                <p class="text-success">Au revoir</p>
+            </div>
+            <p class="login-box-msg"></p>
+
+            <form id="quickForm" autocomplete="on" th:action="@{/login}" method="post">
+                <div class="form-group mb-3">
+                    <label for="email" class="">Adresse mail</label>
+
+                    <input type="email" name="email" id="email" class="form-control " placeholder="Email">
+
+
+                </div>
+                <div class="form-group mb-3">
+                    <label for="password" class="">Mot de passe</label>
+
+                    <input type="password" name="password" id="password" class="form-control "
+                           placeholder="Mot de passe">
+
+
+                </div>
+                <div class="row">
+
+
+                    <!-- /.col -->
+                    <div class="col-12">
+
+                        <button type="submit" class="btn btn-danger btn-block btn-flat ">Se connecter</button>
+                    </div>
+                    <div class="col-12">
+                        <p class="mb-1 mt-2 login-box-msg ">
+                            <a class="text-bold " th:href="@{forgot_password}">Mot de passe oublié?</a>
+                        </p>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+        </div>
+
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</div>
+
+<!-- /.login-box -->
+
+<!-- jQuery -->
+<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap -->
+<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- overlayScrollbars -->
+<script th:src="@{/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.js}"></script>
+<script th:src="@{/plugins/jquery-validation/jquery.validate.min.js}"></script>
+<script th:src="@{/plugins/jquery-validation/additional-methods.min.js}"></script>
+<!-- PAGE /plugins -->
+<!-- jQuery Mapael -->
+<script th:src="@{/plugins/jquery-mousewheel/jquery.mousewheel.js}"></script>
+<script th:src="@{/plugins/raphael/raphael.min.js}"></script>
+<script th:src="@{/plugins/jquery-mapael/jquery.mapael.min.js}"></script>
+<script th:src="@{/plugins/jquery-mapael/maps/usa_states.min.js}"></script>
+<!-- ChartJS -->
+<script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
+<script type="text/javascript">
+    $(function () {
+        // $.validator.setDefaults({
+        //     submitHandler: function () {
+        //     }
+        // });
+        $('#quickForm').validate({
+            rules: {
+                username: {
+                    required: true
+                },
+                password: {
+                    required: true,
+                    maxlength: 10
+
+                },
+
+            },
+            messages: {
+                username: {
+                    required: "Ce champ obligatoire",
+
+                },
+                password: {
+                    required: "Ce champ obligatoire",
+                }
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

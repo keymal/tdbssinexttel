@@ -7,6 +7,7 @@ import com.example.tdbssinexttel.repository.RoleRepository;
 import com.example.tdbssinexttel.repository.UtilisateurRepository;
 import com.example.tdbssinexttel.utils.enums.EtatUtilisateur;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     private UtilisateurRepository utilisateurRepository;
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public List<Utilisateur> listUtilisateur() {
@@ -38,12 +42,18 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public Utilisateur saveUser(Utilisateur utilisateur) {
         boolean isUserUpdate = (utilisateur.getId() != null);
         if (isUserUpdate) {
-            System.err.println("hel");
-            utilisateur.setEtatUtilisateur(EtatUtilisateur.ACTIF);
+
+            Utilisateur existingUser = utilisateurRepository.findById(utilisateur.getId()).get();
+
+            if(utilisateur.getPassword().isEmpty()){
+                utilisateur.setPassword(existingUser.getPassword());
+            }
+
+
             return    utilisateurRepository.save(utilisateur);
 
         } else {
-            System.err.println("well");
+            utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
             utilisateur.setEtatUtilisateur(EtatUtilisateur.ACTIF);
             return utilisateurRepository.save(utilisateur);
         }
@@ -53,7 +63,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
 
     public Boolean findUserByEmail(Integer id, String email) {
-        Utilisateur userEmail = utilisateurRepository.findUtilisateurByEmailIgnoreCase(email);
+        Utilisateur userEmail = utilisateurRepository.findByEmail(email);
+        System.err.println(userEmail);
 
         if (userEmail == null) return true;
         boolean isCreatingnew = (id == null);
@@ -102,6 +113,13 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         utilisateurRepository.updateEnableStatus(id, status);
 
+    }
+
+
+
+    @Override
+    public Utilisateur getUserByEmail(String email){
+        return utilisateurRepository.findByEmail(email);
     }
 
 }

@@ -4,6 +4,7 @@ import com.example.tdbssinexttel.exception.UserNotFoundException;
 import com.example.tdbssinexttel.model.Role;
 import com.example.tdbssinexttel.model.Utilisateur;
 import com.example.tdbssinexttel.repository.RoleRepository;
+import com.example.tdbssinexttel.security.MyCompteDetails;
 import com.example.tdbssinexttel.service.UtilisateurService;
 import com.example.tdbssinexttel.utils.enums.FileUploadUtil;
 import com.example.tdbssinexttel.utils.enums.ListeDesRoles;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -69,6 +71,7 @@ public class UtilisateurController {
     public String saveUser(Utilisateur utilisateur, RedirectAttributes redirectAttributes, @RequestParam("image")MultipartFile multipartFile) throws IOException {
 
         System.err.println(utilisateur);
+
 
         if(!multipartFile.isEmpty()){
 
@@ -161,6 +164,16 @@ public class UtilisateurController {
 
         return "redirect:/utilisateurs";
 
+
+    }
+
+    @GetMapping("/account")
+    public String viewDetails(@AuthenticationPrincipal MyCompteDetails loggedUser, Model model){
+
+        String email = loggedUser.getUsername();
+        Utilisateur utilisateur = utilisateurService.getUserByEmail(email);
+        model.addAttribute("utilisateur",utilisateur );
+        return "account_form";
 
     }
 }

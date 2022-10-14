@@ -18,4 +18,6 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
     @Query("update  Utilisateur u set u.status  = ?2 where  u.id = ?1")
     @Modifying
     public void updateEnableStatus(Integer id , boolean enabled);
+
+    Utilisateur findByEmail(String email);
 }
