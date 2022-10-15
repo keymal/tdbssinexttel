@@ -775,7 +775,8 @@
                             <div class="card-body">
 
 
-                                <form id="quickForm" onsubmit="return  check_mail(this);" autocomplete="off" enctype="multipart/form-data"
+                                <form id="quickForm" onsubmit="return  check_mail(this);" autocomplete="off"
+                                      enctype="multipart/form-data"
                                       th:action="@{/utilisateurs/save}" method="post"
                                       th:object="${utilisateur}">
                                     <div class="row">
@@ -792,6 +793,12 @@
                                             </div>
 
                                         </div>
+
+                                        <th:block th:if="${utilisateur.id != null}">
+
+                                            <input type="hidden" th:field="*{password}" name="password"
+                                            >
+                                        </th:block>
 
                                         <th:block th:if="${utilisateur.id == null}">
                                             <div class="col-md-4">
@@ -854,7 +861,7 @@
                                         <div class="col-sm-7">
                                             <div class="form-group">
                                                 <label for="fileImage">Photo</label>
-                                                <input type="hidden" th:field="*{photos}" >
+                                                <input type="hidden" th:field="*{photos}">
 
                                                 <div class="input-group">
                                                     <input name="image" accept="image/*" type="file" id="fileImage">
@@ -867,7 +874,8 @@
                                         <div class="col-sm-3">
                                             <img id="thumbail" alt="Photo preview"
                                                  class="brand-image img-circle elevation-3"
-                                                 th:src="@{${utilisateur.photosImagePath}}" width="100px" height="100px">
+                                                 th:src="@{${utilisateur.photosImagePath}}" width="100px"
+                                                 height="100px">
                                         </div>
 
 
@@ -1004,7 +1012,7 @@
         userEmail = $("#email").val();
         csrf1 = $("input[name = '_csrf']").val();
         console.log(csrf);
-        params = {email: userEmail, id: userId, csrf:csrf1 };
+        params = {email: userEmail, id: userId, csrf: csrf1};
 
 
         $.post(url, params, function (response) {
@@ -1042,7 +1050,7 @@
         var reader = new FileReader();
         reader.onload = function (e) {
 
-             $("#thumbail").attr("src", e.target.result);
+            $("#thumbail").attr("src", e.target.result);
         };
 
         reader.readAsDataURL(file);
@@ -1055,11 +1063,10 @@
         $("#fileImage").change(function () {
 
             fileSize = this.files[0].size;
-            if(fileSize > 1048576){
+            if (fileSize > 1048576) {
                 this.setCustomValidity("Votre image ne doit pas dépassé 1mb");
                 this.reportValidity();
-            }
-            else {
+            } else {
                 this.setCustomValidity("");
                 showImageThumbnail(this);
 

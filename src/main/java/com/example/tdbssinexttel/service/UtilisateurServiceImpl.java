@@ -28,7 +28,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<Utilisateur> listUtilisateur() {
-        return utilisateurRepository.findUtilisateursByEtatUtilisateur(EtatUtilisateur.ACTIF);
+        return utilisateurRepository.findUtilisateursByEtatUtilisateurAndIdNot(EtatUtilisateur.ACTIF,1);
     }
 
     @Override
@@ -45,9 +45,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
             Utilisateur existingUser = utilisateurRepository.findById(utilisateur.getId()).get();
 
-            if(utilisateur.getPassword().isEmpty()){
-                utilisateur.setPassword(existingUser.getPassword());
-            }
+            System.err.println(utilisateur.getPassword());
+            utilisateur.setEtatUtilisateur(existingUser.getEtatUtilisateur());
+
 
 
             return    utilisateurRepository.save(utilisateur);
@@ -64,7 +64,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     public Boolean findUserByEmail(Integer id, String email) {
         Utilisateur userEmail = utilisateurRepository.findByEmail(email);
-        System.err.println(userEmail);
 
         if (userEmail == null) return true;
         boolean isCreatingnew = (id == null);

@@ -13,7 +13,7 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
 
     public long countById(Integer id);
 
-    List<Utilisateur> findUtilisateursByEtatUtilisateur(EtatUtilisateur etatUtilisateur);
+    List<Utilisateur> findUtilisateursByEtatUtilisateurAndIdNot(EtatUtilisateur etatUtilisateur, Integer id);
 
     @Query("update  Utilisateur u set u.status  = ?2 where  u.id = ?1")
     @Modifying
