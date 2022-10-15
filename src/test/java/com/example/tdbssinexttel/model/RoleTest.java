@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,7 +26,6 @@ class RoleTest {
         for (ListeDesRoles listeDesRoles : values
         ) {
             Role role = new Role(listeDesRoles.name(), "");
-
             roleRepository.save(role);
         }
 

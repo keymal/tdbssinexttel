@@ -48,15 +48,17 @@ public class Utilisateur extends AbstractEntity implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles = new ArrayList<>();
 
-
-
     public void addRole(Role role) {
         this.roles.add(role);
     }
 
     //Pour dire que cet attribut ne mappe avec rien de la base de donneés
 
+    private transient String y;
 
+    public void setY(String y) {
+        this.y = y;
+    }
 
     public String getY() {
         if (id == null || photos == null) return "/images/Nexttel-Cameroon-Logo.png";
