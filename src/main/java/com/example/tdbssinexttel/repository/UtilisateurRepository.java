@@ -1,7 +1,7 @@
 package com.example.tdbssinexttel.repository;
 
 import com.example.tdbssinexttel.model.Utilisateur;
-import com.example.tdbssinexttel.utils.enums.EtatUtilisateur;
+import com.example.tdbssinexttel.utils.enums.Etat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +13,7 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
 
     public long countById(Integer id);
 
-    List<Utilisateur> findUtilisateursByEtatUtilisateur(EtatUtilisateur etatUtilisateur);
+    List<Utilisateur> findUtilisateursByEtatUtilisateurAndIdNot(Etat etatUtilisateur,Integer id);
 
     @Query("update  Utilisateur u set u.status  = ?2 where  u.id = ?1")
     @Modifying

@@ -1,5 +1,5 @@
 package com.example.tdbssinexttel.utils.enums;
 
-public enum EtatUtilisateur {
+public enum EtatDepartement {
     ACTIF, INACTIF
 }

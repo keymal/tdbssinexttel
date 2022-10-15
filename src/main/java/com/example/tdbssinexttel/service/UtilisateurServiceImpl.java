@@ -5,7 +5,7 @@ import com.example.tdbssinexttel.model.Role;
 import com.example.tdbssinexttel.model.Utilisateur;
 import com.example.tdbssinexttel.repository.RoleRepository;
 import com.example.tdbssinexttel.repository.UtilisateurRepository;
-import com.example.tdbssinexttel.utils.enums.EtatUtilisateur;
+import com.example.tdbssinexttel.utils.enums.Etat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<Utilisateur> listUtilisateur() {
-        return utilisateurRepository.findUtilisateursByEtatUtilisateur(EtatUtilisateur.ACTIF);
+        return utilisateurRepository.findUtilisateursByEtatUtilisateurAndIdNot(Etat.ACTIF,1);
     }
 
     @Override
@@ -45,16 +45,14 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
             Utilisateur existingUser = utilisateurRepository.findById(utilisateur.getId()).get();
 
-            if(utilisateur.getPassword().isEmpty()){
-                utilisateur.setPassword(existingUser.getPassword());
-            }
+            utilisateur.setEtatUtilisateur(existingUser.getEtatUtilisateur());
 
 
             return    utilisateurRepository.save(utilisateur);
 
         } else {
             utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
-            utilisateur.setEtatUtilisateur(EtatUtilisateur.ACTIF);
+            utilisateur.setEtatUtilisateur(Etat.ACTIF);
             return utilisateurRepository.save(utilisateur);
         }
     }
@@ -101,7 +99,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         }
         Utilisateur utilisateur = utilisateurRepository.findById(id).get();
 
-        utilisateur.setEtatUtilisateur(EtatUtilisateur.INACTIF);
+        utilisateur.setEtatUtilisateur(Etat.INACTIF);
 
         utilisateurRepository.save(utilisateur);
     }

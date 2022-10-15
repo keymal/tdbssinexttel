@@ -1,11 +1,6 @@
 package com.example.tdbssinexttel.model;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import com.example.tdbssinexttel.repository.RoleRepository;
 import com.example.tdbssinexttel.repository.UtilisateurRepository;
-import com.example.tdbssinexttel.utils.enums.EtatUtilisateur;
-import com.example.tdbssinexttel.utils.enums.ListeDesRoles;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -13,9 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Rollback;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

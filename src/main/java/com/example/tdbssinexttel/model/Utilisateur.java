@@ -1,6 +1,6 @@
 package com.example.tdbssinexttel.model;
 
-import com.example.tdbssinexttel.utils.enums.EtatUtilisateur;
+import com.example.tdbssinexttel.utils.enums.Etat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,7 +41,7 @@ public class Utilisateur extends AbstractEntity implements Serializable {
     private String resetPasswordToken;
 
     @Enumerated(EnumType.STRING)
-    private EtatUtilisateur etatUtilisateur;
+    private Etat etatUtilisateur;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "compte_roles",
             joinColumns = @JoinColumn(name = "utiliateur_id", referencedColumnName = "id"),
