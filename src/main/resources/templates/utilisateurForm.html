@@ -973,6 +973,11 @@
                 equalTo: "#password"
 
 
+            },
+            image:{
+                filesize : 1,
+                extension: "jpeg | png",
+
             }
 
         },
@@ -1005,15 +1010,15 @@
         url = "[[@{/utilisateurs/check_mail}]]";
         userId = $("#id").val();
         userEmail = $("#email").val();
+
         csrf1 = $("input[name = '_csrf']").val();
-        console.log(csrf);
-        params = {email: userEmail, id: userId, csrf:csrf1 };
+
+        params = {email: userEmail, id: userId, _csrf:csrf1 };
 
 
         $.post(url, params, function (response) {
 
             if (response == "OK") {
-
                 form.submit();
             } else {
                 showModalDialog("Il existe un utilisateur avec l'adresse [" + $("#email").val() + "]");

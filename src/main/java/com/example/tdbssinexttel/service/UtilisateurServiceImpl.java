@@ -28,7 +28,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<Utilisateur> listUtilisateur() {
-        return utilisateurRepository.findUtilisateursByEtatUtilisateurAndIdNot(Etat.ACTIF,1);
+        return utilisateurRepository.findUtilisateursByEtatUtilisateurAndIdNot(Etat.ACTIF, 1);
     }
 
     @Override
@@ -45,10 +45,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
             Utilisateur existingUser = utilisateurRepository.findById(utilisateur.getId()).get();
 
-            utilisateur.setEtatUtilisateur(existingUser.getEtatUtilisateur());
+            existingUser.setRoles(utilisateur.getRoles());
+            existingUser.setStatus(utilisateur.getStatus());
 
-
-            return    utilisateurRepository.save(utilisateur);
+            return utilisateurRepository.save(existingUser);
 
         } else {
             utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
@@ -114,10 +114,29 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
 
-
     @Override
-    public Utilisateur getUserByEmail(String email){
+    public Utilisateur getUserByEmail(String email) {
         return utilisateurRepository.findByEmail(email);
     }
 
+
+    @Override
+    public Utilisateur updateAccount(Utilisateur utilisateur) {
+        Utilisateur existUser = utilisateurRepository.findById(utilisateur.getId()).get();
+        if (!utilisateur.getPassword().isEmpty()) {
+            existUser.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
+
+        }
+        if (utilisateur.getPhotos() != null) {
+            existUser.setPhotos(utilisateur.getPhotos());
+        }
+        return utilisateurRepository.save(existUser);
+
+
+    }
+
+    @Override
+    public Utilisateur getById(Integer id ){
+        return utilisateurRepository.findById(id).get();
+    }
 }

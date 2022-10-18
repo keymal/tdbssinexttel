@@ -100,6 +100,8 @@ public class UtilisateurController {
     @PostMapping("/check_mail")
     public String check_mail(@Param("email") String email, @Param("id") Integer id) {
 
+        Boolean userByEmail = utilisateurService.findUserByEmail(id, email);
+        System.err.println(userByEmail);
         return utilisateurService.findUserByEmail(id, email) ? "OK" : "L'adresse mail existe deja";
     }
 
@@ -135,7 +137,6 @@ public class UtilisateurController {
         try {
             utilisateurService.delete(id);
 
-
             redirectAttributes.addFlashAttribute("message", "Utilisateur avec " + id + " a été supprimé pour les opérations");
 
 
@@ -158,7 +159,8 @@ public class UtilisateurController {
 
 
         String enabled = status ? "actif" : "inactif";
-        String message = "Utilisateur " + id + " est désormais " + enabled;
+        Utilisateur utilisateurServiceById = utilisateurService.getById(id);
+        String message = "Utilisateur " + utilisateurServiceById.getEmail() + " est désormais " + enabled;
         redirectAttributes.addFlashAttribute("message", message);
 
 
@@ -167,13 +169,5 @@ public class UtilisateurController {
 
     }
 
-    @GetMapping("/account")
-    public String viewDetails(@AuthenticationPrincipal MyCompteDetails loggedUser, Model model){
 
-        String email = loggedUser.getUsername();
-        Utilisateur utilisateur = utilisateurService.getUserByEmail(email);
-        model.addAttribute("utilisateur",utilisateur );
-        return "account_form";
-
-    }
 }

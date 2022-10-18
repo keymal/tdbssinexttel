@@ -1,6 +1,9 @@
 package com.example.tdbssinexttel.service;
 
+import com.example.tdbssinexttel.exception.DirectionNotFoundException;
+import com.example.tdbssinexttel.exception.UserNotFoundException;
 import com.example.tdbssinexttel.model.Departement;
+import com.example.tdbssinexttel.model.Utilisateur;
 import com.example.tdbssinexttel.repository.DepartementRepository;
 import com.example.tdbssinexttel.utils.enums.Etat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +25,12 @@ public class DepartementServiceImpl implements DepartementService {
             Departement exist = departementRepository.findById(departement.getId()).get();
 
 
-
-
-            return    departementRepository.save(departement);
-
-        }
-
-        else {
-            departement.setEtat(Etat.ACTIF);
             return departementRepository.save(departement);
-        }    }
+
+        } else {
+            return departementRepository.save(departement);
+        }
+    }
+
+
 }

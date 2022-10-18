@@ -22,4 +22,8 @@ public interface UtilisateurService {
     void  updateUserEnabledStatus(Integer id, boolean status);
 
     Utilisateur getUserByEmail(String email);
+
+    Utilisateur updateAccount(Utilisateur utilisateur);
+
+    Utilisateur getById(Integer id);
 }

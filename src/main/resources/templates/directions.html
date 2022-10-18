@@ -19,7 +19,7 @@
     <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
     <title>Title</title>
 </head>
-<body class="hold-transition  sidebar-mini layout-fixed layout-navbar-fixed  pace-primary">
+<body class="hold-transition  sidebar-mini layout-fixed layout-navbar-fixed pace-primary">
 
 <div class="wrapper">
 
@@ -751,9 +751,8 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0"> Informations sur le profil
-                        </h1>
-                    </div><!-- /.col -->
+                        <h1 class="m-0"> [[${pageTitle}]]
+                        </h1>                    </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Tableau de bord</a></li>
@@ -773,86 +772,44 @@
 
                             <!-- /.card-header -->
                             <div class="card-body">
-
-
-                                <form id="quickForm"  autocomplete="off" enctype="multipart/form-data"
-                                      th:action="@{/account/update}" method="post"
-                                      th:object="${utilisateur}">
-                                    <div class="row">
-
-
-                                        <input type="hidden" th:field="*{id}" name="id" id="id">
-
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="email">Adresse mail</label>
-                                                <input type="email" th:field="*{email}" name="email" readonly
-                                                       class="form-control" id="email"
-                                                >
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="password">Mot de passe</label>
-                                                <input type="password" th:field="*{password}" name="password" minlength="8" maxlength="16"
-                                                       class="form-control" id="password" required placeholder="Ne rien remplir ici si vous ne souhaitez pas changer de mot de passe"
-                                                >
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="rpassword">Confirmer le mot de passe</label>
-                                                <input type="password" name="rpassword" class="form-control"
-                                                       id="rpassword" required minlength="8" maxlength="16"
-                                                >
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col-sm-12">
-                                            <!-- checkbox -->
-                                            <div class="form-group">
-                                                <label>Roles</label>
-
-                                              <span class="text-blue">[[${utilisateur.roles}]]</span>
-
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label for="fileImage">Photo</label>
-                                                <input type="hidden" th:field="*{photos}" >
-
-                                                <div class="input-group">
-                                                    <input name="image" accept="image/*" type="file" id="fileImage">
-
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <img id="thumbail" alt="Photo preview"
-                                                 class="brand-image img-circle elevation-3"
-                                                 th:src="@{${utilisateur.photosImagePath}}" width="100px" height="100px">
-                                        </div>
-
-
-
-                                        <div class="col-md-12 align-self-end" th:if="${utilisateur.id != null}">
-                                            <button class="btn btn-primary" type="submit">Enregistrer</button>
-                                        </div>
-
+                                <div class=" mt-3">
+                                    <div th:if="${message != null}" class="alert alert-default-success text-center ">
+                                        [[${message}]]
                                     </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table id="employees"
+                                           class="display table table-head-fixed table-hover  table-bordered dt-responsive nowrap"
+                                           style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nom</th>
+                                            <th>Libellé</th>
+                                            <th>Statut</th>
+                                            <th>Option 1</th>
+                                            <th>Option 2</th>
 
-                                </form>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
 
+                                        </tbody>
+
+                                        <tfoot>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nom</th>
+                                            <th>Description</th>
+                                            <th>Statut</th>
+                                            <th>Option 1</th>
+                                            <th>Option 2</th>
+
+                                        </tr>
+                                        </tfoot>
+
+                                    </table>
+                                </div>
 
                             </div>
                             <!-- /.card-body -->
@@ -863,19 +820,21 @@
 
                 </div>
 
-                <div class="modal fade" id="modal-default">
+                <div class="modal fade" id="confirm-modal">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title">Attention</h4>
+                                <h4 class="modal-title text-danger">Confirmation de suppression</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div class="modal-body text-danger" id="mbody">
+                            <div class="modal-body ">
+                                <p id="confirm-text"></p>
                             </div>
                             <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <a class="btn btn-danger" id="yesButton" href="">Confirmer</a>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
                             </div>
                         </div>
                         <!-- /.modal-content -->
@@ -894,7 +853,6 @@
 <script th:src="@{/plugins/jquery/jquery.min.js}"></script>
 <!-- Bootstrap -->
 <script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/plugins/bs-custom-file-input/bs-custom-file-input.min.js}"></script>
 
 <script th:src="@{/plugins/pace-progress/pace.min.js}"></script>
 <!-- overlayScrollbars -->
@@ -925,133 +883,176 @@
 <!-- ChartJS -->
 <script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
 
-<script type="text/javascript">
+<script th:inline="javascript" type="text/javascript">
+    /*<![CDATA[*/
 
-    <!-- Size in kb -->
-    $.validator.addMethod('image', function (value, element,param) {
-
-        var size=element.files[0].size;
-
-        size=size/1024;
-        size=Math.round(size);
-        return this.optional(element) || size <=param ;
-
-    }, 'File size must be less than {0}');
-    $('#quickForm').validate({
-        rules: {
-            email: {
-                required: true
-            },
-            password: {
-                required: true
-
-            },
-            rpassword: {
-                required: true,
-                equalTo: "#password"
-
-
-            },
-            image: {
-                extension: "jpg,jpeg",
-                filesize: 1000
-            }
-
-        },
-        messages: {
-            email: {},
-            password: {
-
-            },
-            rpassword: {
-                equalTo: "Les mot de passe ne correspondent pas",
-
-            }
-        },
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-            $(element).addClass('is-valid');
-
-        }
-    });
-
-
-    // function check_mail(form) {
-    //
-    //     url = "[[@{/utilisateurs/check_mail}]]";
-    //     userId = $("#id").val();
-    //     userEmail = $("#email").val();
-    //     csrf1 = $("input[name = '_csrf']").val();
-    //     params = {email: userEmail, id: userId, csrf:csrf1 };
-    //
-    //
-    //     $.post(url, params, function (response) {
-    //
-    //         if (response == "OK") {
-    //
-    //             form.submit();
-    //         } else {
-    //             showModalDialog("Il existe un utilisateur avec l'adresse [" + $("#email").val() + "]");
-    //         }
-    //
-    //
-    //     }).fail(function () {
-    //         showModalDialog("Impossible de se connecter au serveur");
-    //     });
-    //     return false;
-    //
-    //
-    //     function showModalDialog(message) {
-    //         $("#mbody").text(message);
-    //         $("#modal-default").modal();
-    //
-    //     }
-    //
-    // }
-
+    var table;
     $(function () {
-        bsCustomFileInput.init();
+
+
+        $.ajax({
+            url: '/directions/restDirections',
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                table = $('#employees').DataTable({
+                    language: {
+                        processing: "Traitement en cours...",
+                        search: "Rechercher&nbsp;:",
+                        lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+                        info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                        infoEmpty: "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+                        infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                        infoPostFix: "",
+                        loadingRecords: "Chargement en cours...",
+                        zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                        emptyTable: "Aucune donnée disponible dans le tableau",
+                        paginate: {
+                            first: "Premier",
+                            previous: "Pr&eacute;c&eacute;dent",
+                            next: "Suivant",
+                            last: "Dernier"
+                        },
+                        aria: {
+                            sortAscending: ": activer pour trier la colonne par ordre croissant",
+                            sortDescending: ": activer pour trier la colonne par ordre décroissant"
+                        }
+                    },
+
+
+                    deferLoading: 57,
+                    "pageLength": 3,
+                    lengthMenu: [
+                        [3, 5, -1],
+                        [3, 5, 'Toute'],
+                    ],
+                    autoFill: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'csv', 'excel', 'pdf', 'print'
+                    ],
+
+
+                    data: response,
+                    columns: [
+                        {
+                            data: 'id'
+                        },
+                        {
+                            data: 'nom'
+                        },
+                        {
+                            data: 'description'
+                        },
+                        {
+                            "data": "status", "render": function (data, type, row) {
+                                var userId = row.id;
+
+
+                                if (data == true) {
+
+                                    var link = /*[[@{/directions/}]]*/'';
+                                    link = link + userId + "/enabled/false";
+
+                                    return '<a title="Rendre disponible" href="' + link + '" class="text-danger">Rendre indisponible</a>'
+
+                                } else {
+
+                                    var link = /*[[@{/directions/}]]*/'';
+                                    link = link + userId + "/enabled/true";
+
+                                    return '<a  title="Rendre indisponible" href="' + link + '" class="text-success">Rendre disponible</a>'
+
+
+                                }
+
+
+                            }
+                        },
+                        {
+                            "data": "id", "render": function (id) {
+
+
+                                var link = /*[[@{/directions/edit/}]]*/'';
+                                return '<a class="fas fa-edit  text-primary" title="Modifier les informations de cet utilisateur"   href="' + link + id + '"></a>'
+
+                            }
+                        },
+                        {
+                            "data": "id", "render": function (id) {
+
+                                var link = /*[[@{/directions/delete/}]]*/'';
+                                return '<a  userId="' + id + '" class="fas fa-trash  text-danger link-delete"  title="Rendre inactif cet utilisateur dans le système"  href="' + link + id + '"></a>'
+
+                            }
+                        }
+
+
+                    ],
+                    stateSave: true,
+                    "bDestroy": true
+                });
+
+                var data = table.rows({selected: false}).data();
+                identifiant = []
+                for (var i = 0; i < data.length; i++) {
+                    identifiant.push(data[i]['id']);
+
+                }
+                console.log(identifiant)
+
+
+            },
+            error: function (error) {
+                alert(error);
+            }
+        })
+
     });
 
-
-    function showImageThumbnail(fileInput) {
-
-        var file = fileInput.files[0];
-        var reader = new FileReader();
-        reader.onload = function (e) {
-
-             $("#thumbail").attr("src", e.target.result);
-        };
-
-        reader.readAsDataURL(file);
-
-    }
 
     $(document).ready(function () {
-        // window.location = "[[@{/utilisateurs/check_mail}]]";
 
-        $("#fileImage").change(function () {
 
-            fileSize = this.files[0].size;
-            if(fileSize > 1048576){
-                this.setCustomValidity("Votre image ne doit pas dépassé 1mb");
-                this.reportValidity();
+        $('#employees tbody').on('click', 'tr', function () {
+
+
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            } else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
             }
-            else {
-                this.setCustomValidity("");
-                showImageThumbnail(this);
+        });
 
-            }
+    });
+
+
+    /*]]>*/
+
+
+</script>
+<script type="text/javascript">
+
+    $(function () {
+        $(document).on("click", ".link-delete", function (e) {
+            e.preventDefault();
+            link = $(this);
+            userId = link.attr("userId");
+
+            $("#yesButton").attr("href", link.attr("href"));
+            $("#confirm-text").text("Confirmer la suppresion de la direction  avec pour identifiant  [" + userId + "] ?");
+            $("#confirm-modal").modal();
 
         });
+    })
+
+    $(document).ready(function () {
+
+
+        // var utilisateurs = [[${utilisateurs}]];
+
+
     });
 
 
