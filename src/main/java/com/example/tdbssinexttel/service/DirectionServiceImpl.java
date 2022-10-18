@@ -1,6 +1,7 @@
 package com.example.tdbssinexttel.service;
 
 import com.example.tdbssinexttel.exception.DirectionNotFoundException;
+import com.example.tdbssinexttel.exception.UserNotFoundException;
 import com.example.tdbssinexttel.model.Direction;
 import com.example.tdbssinexttel.repository.DirectionRepository;
 import com.example.tdbssinexttel.utils.enums.Etat;
@@ -9,12 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
 public class DirectionServiceImpl implements DirectionService {
     @Autowired
     DirectionRepository directionRepository;
+
     @Override
     public Direction save(Direction direction) {
 
@@ -23,7 +26,8 @@ public class DirectionServiceImpl implements DirectionService {
 
             Direction existingUser = directionRepository.findById(direction.getId()).get();
 
-            existingUser.setLibellé(direction.getLibellé());
+            existingUser.setDescription(direction.getDescription());
+            existingUser.setNom(direction.getNom());
 
             return directionRepository.save(existingUser);
 
@@ -67,7 +71,7 @@ public class DirectionServiceImpl implements DirectionService {
 
     @Override
     public Boolean checkDirectionByNm(Integer id, String email) {
-        Direction direction = directionRepository.findDirectionByNomIgnoreCaseAndEtat(email,Etat.ACTIF);
+        Direction direction = directionRepository.findDirectionByNomIgnoreCaseAndEtat(email, Etat.ACTIF);
 
 
         if (direction == null) return true;
@@ -84,7 +88,13 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
-    public Direction getById(Integer id){
-        return directionRepository.findById(id).get();
+    public Direction getById(Integer id) throws DirectionNotFoundException {
+        try {
+            return directionRepository.findById(id).get();
+
+        } catch (
+                NoSuchElementException ex) {
+            throw new DirectionNotFoundException("Impossible de trouver :" + id);
+        }
     }
 }

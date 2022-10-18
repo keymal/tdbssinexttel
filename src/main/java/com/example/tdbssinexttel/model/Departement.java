@@ -31,10 +31,14 @@ public class Departement  extends AbstractEntity implements Serializable {
 
     private boolean status;
 
+    @Enumerated(EnumType.STRING)
+    private Etat etat;
+
 
     public Departement(String nom) {
         this.nom = nom;
     }
+
 
 
 

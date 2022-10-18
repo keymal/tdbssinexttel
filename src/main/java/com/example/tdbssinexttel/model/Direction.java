@@ -18,7 +18,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 public class Direction extends AbstractEntity implements Serializable {
-    @Column(unique = true)
     private String nom;
 
     private String description;
@@ -32,7 +31,6 @@ public class Direction extends AbstractEntity implements Serializable {
         this.nom = nom;
     }
 
-    private String libellé;
 
 
 

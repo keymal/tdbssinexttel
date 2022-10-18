@@ -11,18 +11,15 @@
   <!-- overlayScrollbars -->
   <link rel="stylesheet" th:href="@{/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
 
+  <link rel="stylesheet" th:href="@{/plugins/select2/css/select2.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css}">
+
+
+
   <link rel="stylesheet" th:href="@{/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
   <link rel="stylesheet" th:href="@{/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
   <link rel="stylesheet" th:href="@{/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
   <link rel="stylesheet" th:href="@{/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}">
-
-  <link rel="stylesheet" th:href="@{/plugins/select2/css/select2.min.css}">
-
-  <link rel="stylesheet" th:href="@{/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css}">
-
-  <link rel="stylesheet" th:href="@{/plugins/summernote/summernote-bs4.min.css}">
-
-
   <!-- Theme style -->
   <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
   <title>Title</title>
@@ -783,7 +780,7 @@
               <div class="card-body">
 
 
-                <form id="quickForm" onsubmit="return  check_mail(this);" autocomplete="off" enctype="multipart/form-data"
+                <form id="quickForm" onsubmit="return  check_mail(this);" autocomplete="off"
                       th:action="@{/departements/save}" method="post"
                       th:object="${utilisateur}">
                   <div class="row">
@@ -791,43 +788,54 @@
 
                     <input type="hidden" th:field="*{id}" name="id" id="id">
 
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                       <div class="form-group">
-                        <label for="nom">Nom </label>
-                        <input type="email" th:field="*{nom}" name="email"
-                               class="form-control" id="nom" maxlength="30"
+                        <label for="nom">Nom</label>
+                        <input type="text" th:field="*{nom}" name="nom"
+                               class="form-control" id="nom"
                         >
                       </div>
 
                     </div>
-
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Disabled Result</label>
-                        <select class="form-control select2bs4" style="width: 100%;">
-                          <option selected="selected">Alabama</option>
-                          <option>Alaska</option>
-                          <option disabled="disabled">California (disabled)</option>
-                          <option>Delaware</option>
-                          <option>Tennessee</option>
-                          <option>Texas</option>
-                          <option>Washington</option>
-                        </select>
-                      </div>
-                    </div>
-
-
                     <div class="col-md-12">
                       <div class="form-group">
-                        <label >Descritpion </label>
-                        <textarea id="co" class="form-control" style="height: 140px">
+                        <label >Libellé </label>
+                        <textarea id="co" th:field="*{description}"  class="form-control" style="height: 140px">
 
                     </textarea>
                       </div>
                     </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Responsable</label>
+                        <select class="form-control select2" style="width: 100%;" th:field="*{utilisateur}">
+                          <th:block th:each="u:${user}">
 
+                            <option th:value="${u.id}"  >[[${u.email}]]</option>
 
+                          </th:block>
 
+                        </select>
+                      </div>
+                      <!-- /.form-group -->
+                      <!-- /.form-group -->
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Direction</label>
+                        <select class="form-control select2" name="direction" id="direction" style="width: 100%;" th:field="*{direction}">
+                          <th:block th:each="dep:${departements}">
+
+                            <option th:value="${dep.id}"  >[[${dep.nom}]]</option>
+
+                          </th:block>
+
+                        </select>
+                      </div>
+                      <!-- /.form-group -->
+                      <!-- /.form-group -->
+                    </div>
 
 
                     <div class="col-md-12 align-self-end" th:if="${utilisateur.id == null}">
@@ -892,9 +900,9 @@
 <script th:src="@{/dist/js/adminlte.js}"></script>
 <script th:src="@{/plugins/jquery-validation/jquery.validate.min.js}"></script>
 <script th:src="@{/plugins/jquery-validation/additional-methods.min.js}"></script>
+
 <script th:src="@{/plugins/select2/js/select2.full.min.js}"></script>
 <!-- PAGE /plugins -->
-
 
 <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}" src=""></script>
 <script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}" src=""></script>
@@ -908,10 +916,6 @@
 <script th:src="@{/plugins/datatables-buttons/js/buttons.html5.min.js}" src=""></script>
 <script th:src="@{/plugins/datatables-buttons/js/buttons.print.min.js}" src=""></script>
 <script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}" src=""></script>
-
-
-<script th:src="@{/plugins/summernote/summernote-bs4.min.js}" src=""></script>
-
 <!-- jQuery Mapael -->
 <script th:src="@{/plugins/jquery-mousewheel/jquery.mousewheel.js}"></script>
 <script th:src="@{/plugins/raphael/raphael.min.js}"></script>
@@ -931,34 +935,17 @@
       theme: 'bootstrap4'
     })
 
-    $('#compose-textarea').summernote()
-
-
   });
+
+
   $('#quickForm').validate({
     rules: {
-      email: {
+      nom: {
         required: true
-      },
-      password: {
-        required: true
-
-      },
-      rpassword: {
-        required: true,
-        equalTo: "#password"
-
-
       }
 
     },
     messages: {
-      email: {},
-      password: {},
-      rpassword: {
-        equalTo: "Les mot de passe ne correspondent pas",
-
-      }
     },
     errorElement: 'span',
     errorPlacement: function (error, element) {
@@ -978,28 +965,32 @@
 
   function check_mail(form) {
 
-    url = "[[@{/utilisateurs/check_mail}]]";
+    url = "[[@{/departements/check_mail}]]";
     userId = $("#id").val();
-    userEmail = $("#email").val();
+    direction = $("#direction").val();
+    userEmail = $("#nom").val();
     csrf1 = $("input[name = '_csrf']").val();
-    console.log(csrf);
-    params = {email: userEmail, id: userId, csrf:csrf1 };
+    console.log(csrf1);
+    params = {email: userEmail, id: userId, _csrf:csrf1 , direct:direction};
 
 
+    var s=false;
     $.post(url, params, function (response) {
 
       if (response == "OK") {
-
+        s = true;
         form.submit();
       } else {
-        showModalDialog("Il existe un utilisateur avec l'adresse [" + $("#email").val() + "]");
+        s=false;
+        showModalDialog("Il existe une direction avec le nom  [" + $("#nom").val() + "]");
       }
 
 
     }).fail(function () {
       showModalDialog("Impossible de se connecter au serveur");
+      s=false;
     });
-    return false;
+    return s;
 
 
     function showModalDialog(message) {
@@ -1010,41 +1001,9 @@
 
   }
 
-  $(function () {
-    bsCustomFileInput.init();
-  });
-
-
-  function showImageThumbnail(fileInput) {
-
-    var file = fileInput.files[0];
-    var reader = new FileReader();
-    reader.onload = function (e) {
-
-      $("#thumbail").attr("src", e.target.result);
-    };
-
-    reader.readAsDataURL(file);
-
-  }
-
   $(document).ready(function () {
     // window.location = "[[@{/utilisateurs/check_mail}]]";
 
-    $("#fileImage").change(function () {
-
-      fileSize = this.files[0].size;
-      if(fileSize > 1048576){
-        this.setCustomValidity("Votre image ne doit pas dépassé 1mb");
-        this.reportValidity();
-      }
-      else {
-        this.setCustomValidity("");
-        showImageThumbnail(this);
-
-      }
-
-    });
   });
 
 

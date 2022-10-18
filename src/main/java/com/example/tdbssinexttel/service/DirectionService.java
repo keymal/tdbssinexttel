@@ -19,5 +19,5 @@ public interface DirectionService {
 
     Boolean checkDirectionByNm(Integer id, String email);
 
-    Direction getById(Integer id);
+    Direction getById(Integer id) throws DirectionNotFoundException;
 }

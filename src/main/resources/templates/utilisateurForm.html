@@ -817,8 +817,6 @@
 
                                             </div>
                                         </th:block>
-
-
                                         <div class="col-sm-4">
                                             <!-- checkbox -->
                                             <div class="form-group">
@@ -826,16 +824,11 @@
 
                                                 <th:block th:each=" role : ${listRoles}">
                                                     <div class="form-check">
-                                                        <input class="form-check-input" th:field="*{roles}"
+                                                        <input  class="form-check-input" th:field="*{roles}"
                                                                type="checkbox" th:value="${role.id}"
                                                                th:text="${role.nom}">
-
-
                                                     </div>
-
                                                 </th:block>
-
-
                                             </div>
                                         </div>
 
@@ -843,26 +836,20 @@
                                             <!-- checkbox -->
                                             <div class="form-group">
                                                 <label>Statut du compte</label>
-
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" th:field="*{status}"
                                                            th:value="*{status}">
                                                     <label class="form-check-label"
                                                     >Actif</label>
                                                 </div>
-
-
                                             </div>
                                         </div>
                                         <div class="col-sm-7">
                                             <div class="form-group">
                                                 <label for="fileImage">Photo</label>
                                                 <input type="hidden" th:field="*{photos}" >
-
                                                 <div class="input-group">
                                                     <input name="image" accept="image/*" type="file" id="fileImage">
-
-
                                                 </div>
                                             </div>
 

@@ -50,7 +50,7 @@ public class DirectionController {
 
 
     @GetMapping("/{id}/enabled/{status}")
-    public String enabled(@PathVariable("id") Integer id, @PathVariable("status") boolean status, RedirectAttributes redirectAttributes, Model model) {
+    public String enabled(@PathVariable("id") Integer id, @PathVariable("status") boolean status, RedirectAttributes redirectAttributes, Model model) throws DirectionNotFoundException {
 
 
         directionService.updateUserEnabledStatus(id, status);
@@ -122,6 +122,29 @@ public class DirectionController {
 //
         redirectAttributes.addFlashAttribute("message", "Opération réussie");
         return "redirect:/directions";
+    }
+
+
+    @GetMapping("/edit/{id}")
+    public String fdfdf(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes, Model model) {
+
+
+        try {
+            Direction direction = directionService.getById(id);
+
+            model.addAttribute("utilisateur", direction);
+
+            model.addAttribute("pageTitle", "Mise à jour des informations de la direction avec pour identifiant : " + id);
+
+            return "direction_form";
+
+        } catch (DirectionNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+            return "redirect:/directions";
+
+        }
+
+
     }
 
 }

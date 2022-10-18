@@ -16,12 +16,10 @@ class DepartementTest {
     DepartementRepository departementRepository;
 
     @Test
-    public void createDepartement(){
-        Departement departement = new Departement("RESEAU");
+    public void createDepartement() {
+        Departement departement = new Departement("TRANSMISSION");
         departementRepository.save(departement);
-        System.err.println(departement);
     }
-
 
 
 }
